@@ -1,6 +1,7 @@
-function [log_sffspec, sffcep, sffcepdd] = sffCesptra(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels)
+function [log_sffspec, sffcep, sffcepdd] = sffCesptra_ms(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels)
 
-% Purpose: Compute SFF Spectra, Cepstral and del-del features
+% Purpose: Compute SFF Spectra, Cepstral and del-del features -- mean
+% smoothed version
 
 % Inputs: (1) y            - input signal (must be a row vector)
 %         (2) fs           - sampling rate
@@ -35,7 +36,13 @@ sffspec = flipud(sffspec);
 
 % Step2.2: Down sample temporally the SFF spectrum
 ss_vec = 1:shift_ms:size(sffspec,2); % sub-sampling vector
-sffspec = sffspec(:,ss_vec);
+sffspec_new = zeros(size(sffspec,1),length(ss_vec));
+
+for i = 1:length(ss_vec)-1
+    sffspec_new(:,i) = mean(sffspec(:,ss_vec(i):ss_vec(i+1)),2);
+end
+sffspec_new(:,end) = sffspec(:,end);
+sffspec = sffspec_new;
 
 % Step2.3: Compute full Log-Spectrum
 log_sffspec = 20*log10(sffspec);
