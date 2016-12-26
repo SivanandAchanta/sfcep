@@ -34,18 +34,18 @@ sffspec(sffspec <= 1e-9) = 1e-9;
 % Step2.1: SFF spectrum is inverted so invert again to get the true spectrum
 sffspec = flipud(sffspec);
 
-% Step2.2: Down sample temporally the SFF spectrum
-ss_vec = 1:shift_ms:size(sffspec,2); % sub-sampling vector
-sffspec_new = zeros(size(sffspec,1),length(ss_vec));
-
-for i = 1:length(ss_vec)-1
-    sffspec_new(:,i) = mean(sffspec(:,ss_vec(i):ss_vec(i+1)),2);
-end
-sffspec_new(:,end) = sffspec(:,end);
-sffspec = sffspec_new;
-
-% Step2.3: Compute full Log-Spectrum
+% Step2.2: Compute Log-Spectrum
 log_sffspec = 20*log10(sffspec);
+
+% Step2.3: Down sample temporally the SFF spectrum
+ss_vec = 1:shift_ms:size(log_sffspec,2); % sub-sampling vector
+log_sffspec_new = zeros(size(log_sffspec,1),length(ss_vec));
+for i = 1:length(ss_vec)-1
+    log_sffspec_new(:,i) = mean(log_sffspec(:,ss_vec(i):ss_vec(i+1)),2);
+end
+log_sffspec_new(:,end) = log_sffspec(:,end);
+log_sffspec = log_sffspec_new;
+
 log_sffspec = [log_sffspec;flipud(log_sffspec(2:end-1,:))];
 
 % Cepstral/Homo-morphic analysis for spectrum envelope estimation from SFF Spectrum
