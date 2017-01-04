@@ -20,6 +20,6 @@ shift_ms = 10*(fs/1000); % frame shift for subsampling SFF spectrum
 cep_channels = floor(0.85*(fs/1000)); % maximum number of cepstrum coefficients to consider
 
 % Step2: Compute SFF Spectrum and Cepstrum
-[sffspec, sffcep, sffcepdd] = sffCesptra(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels);
-[sffspec_ms, sffcep_ms, sffcepdd_ms] = sffCesptra_ms(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels);
+% [sffspec, sffcep, sffcepdd] = sffCesptra(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels);
+[sffspec, sffcep, sffcepdd] = sffCesptra_ms(y,fs,step_Hz,pflag,nfft,shift_ms,cep_channels);
 dlmwrite(strcat(featpath, fname, fext), sffcepdd, 'delimiter', ' ');
